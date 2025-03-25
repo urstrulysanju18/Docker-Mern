@@ -1,0 +1,23 @@
+docker network create mern_network
+
+In backend
+
+docker run -d --name mongo-db --network mern_network -p 27017:27017 -v mongo-data:/data/db mongo:latest
+
+docker build -t back .
+docker run -d --name backend --network mern_network -p 5050:5050 -e MONGO_URI="mongodb://mongo-db:27017/mydatabase" back
+
+In frontend
+
+docker build -t front .
+docker run -d --name frontend --network mern_network -p 5173:5173 -e REACT_APP_API_URL="http://backend:5050" front
+
+
+To push images into docker
+docker login
+
+docker tag frontend sanjaybala18/samplerepo:frontend
+docker push sanjaybala18/samplerepo:frontend
+
+docker tag backend sanjaybala18/samplerepo:backend
+docker push sanjaybala18/samplerepo:backend
